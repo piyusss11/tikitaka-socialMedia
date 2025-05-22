@@ -21,6 +21,6 @@ const userRegisterSchema = z.object({
     ),
 });
 
-export function validateUserREgistration(userInfo: IUser) {
-  return userRegisterSchema.parse(userInfo);
+export function validateUserRegistration(userInfo: IUser) {
+  return userRegisterSchema.safeParse(userInfo);
 }

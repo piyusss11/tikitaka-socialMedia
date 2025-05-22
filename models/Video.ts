@@ -1,13 +1,18 @@
 import mongoose, { models, Schema, model } from "mongoose";
 export const VIDEO_DIMENSIONS = {
   height: 1920,
-  weight: 1080,
-};
-interface IVideo {
+  width: 1080,
+} as const;
+export interface IVideo {
   title: string;
   description: string;
   videoUrl: string;
   thumbnailUrl: string;
+  dimensions: {
+    height: number;
+    width: number;
+    quality: number;
+  };
   controls?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -21,6 +26,15 @@ const videoSchema = new Schema<IVideo>(
     videoUrl: { type: String, required: true },
     thumbnailUrl: { type: String, required: true },
     controls: { type: Boolean, default: true },
+    dimensions: {
+      height: {
+        type: Number,
+        required: true,
+        default: VIDEO_DIMENSIONS.height,
+      },
+      width: { type: Number, required: true, default: VIDEO_DIMENSIONS.width },
+      quality: { type: Number, required: true, min: 1, max: 100 },
+    },
   },
   { timestamps: true }
 );
