@@ -1,4 +1,5 @@
 import { IUser } from "@/models/User";
+import { IVideo } from "@/models/Video";
 import { z } from "zod";
 
 const userRegisterSchema = z.object({
@@ -23,4 +24,28 @@ const userRegisterSchema = z.object({
 
 export function validateUserRegistration(userInfo: IUser) {
   return userRegisterSchema.safeParse(userInfo);
+}
+const videoSchema = z.object({
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters long")
+    .max(100, "Title must be at most 100 characters long"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters long")
+    .max(1000, "Description must be at most 1000 characters long"),
+  videoUrl: z.string().url("Invalid video URL"),
+  thumbnailUrl: z.string().url("Invalid thumbnail URL"),
+  dimensions: z.object({
+    height: z.number().positive("Height must be a positive number"),
+    width: z.number().positive("Width must be a positive number"),
+    quality: z
+      .number()
+      .min(0, "Quality must be between 0 and 100")
+      .max(100, "Quality must be between 0 and 100"),
+  }),
+});
+
+export function validateVideo(videoInfo: IVideo) {
+  return videoSchema.safeParse(videoInfo);
 }
